@@ -24,7 +24,7 @@ public class TankManager
         _canvasGameObject = Instance.GetComponentInChildren<Canvas>().gameObject;
 
         _movement.PlayerNumber = PlayerNumber;
-        _shooting.m_PlayerNumber = PlayerNumber;
+        _shooting.PlayerNumber = PlayerNumber;
 
         ColoredPlayerText = "<color=#" + ColorUtility.ToHtmlStringRGB(PlayerColor) + ">PLAYER " + PlayerNumber + "</color>";
 
