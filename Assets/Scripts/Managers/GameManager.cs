@@ -37,9 +37,9 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < m_Tanks.Length; i++)
         {
-            m_Tanks[i].m_Instance =
-                Instantiate(m_TankPrefab, m_Tanks[i].m_SpawnPoint.position, m_Tanks[i].m_SpawnPoint.rotation) as GameObject;
-            m_Tanks[i].m_PlayerNumber = i + 1;
+            m_Tanks[i].Instance =
+                Instantiate(m_TankPrefab, m_Tanks[i].SpawnPoint.position, m_Tanks[i].SpawnPoint.rotation) as GameObject;
+            m_Tanks[i].PlayerNumber = i + 1;
             m_Tanks[i].Setup();
         }
     }
@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < targets.Length; i++)
         {
-            targets[i] = m_Tanks[i].m_Instance.transform;
+            targets[i] = m_Tanks[i].Instance.transform;
         }
 
         m_CameraControl.m_Targets = targets;
@@ -99,7 +99,7 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < m_Tanks.Length; i++)
         {
-            if (m_Tanks[i].m_Instance.activeSelf)
+            if (m_Tanks[i].Instance.activeSelf)
                 numTanksLeft++;
         }
 

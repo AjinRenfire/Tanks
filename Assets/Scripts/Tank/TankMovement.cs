@@ -2,61 +2,82 @@
 
 public class TankMovement : MonoBehaviour
 {
-    public int m_PlayerNumber = 1;         
-    public float m_Speed = 12f;            
-    public float m_TurnSpeed = 180f;       
-    public AudioSource m_MovementAudio;    
-    public AudioClip m_EngineIdling;       
-    public AudioClip m_EngineDriving;      
-    public float m_PitchRange = 0.2f;
+    public int PlayerNumber = 1;         
+    public float Speed = 12f;            
+    public float TurnSpeed = 180f;       
+    public AudioSource MovementAudio;    
+    public AudioClip EngineIdling;       
+    public AudioClip EngineDriving;      
+    public float PitchRange = 0.2f;
 
-    /*
-    private string m_MovementAxisName;     
-    private string m_TurnAxisName;         
-    private Rigidbody m_Rigidbody;         
-    private float m_MovementInputValue;    
-    private float m_TurnInputValue;        
-    private float m_OriginalPitch;         
+    
+    private string _movementAxisName;     
+    private string _turnAxisName;         
+    private Rigidbody _rigidbody;         
+    private float _movementInputValue;    
+    private float _turnInputValue;        
+    private float _originalPitch;         
 
 
     private void Awake()
     {
-        m_Rigidbody = GetComponent<Rigidbody>();
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
 
     private void OnEnable ()
     {
-        m_Rigidbody.isKinematic = false;
-        m_MovementInputValue = 0f;
-        m_TurnInputValue = 0f;
+        _rigidbody.isKinematic = false;
+        _movementInputValue = 0f;
+        _turnInputValue = 0f;
     }
 
 
     private void OnDisable ()
     {
-        m_Rigidbody.isKinematic = true;
+        _rigidbody.isKinematic = true;
     }
 
 
     private void Start()
     {
-        m_MovementAxisName = "Vertical" + m_PlayerNumber;
-        m_TurnAxisName = "Horizontal" + m_PlayerNumber;
+        _movementAxisName = "Vertical" + PlayerNumber;
+        _turnAxisName = "Horizontal" + PlayerNumber;
 
-        m_OriginalPitch = m_MovementAudio.pitch;
+        _originalPitch = MovementAudio.pitch;
     }
-    */
+    
 
     private void Update()
     {
-        // Store the player's input and make sure the audio for the engine is playing.
+        
+        _movementInputValue = Input.GetAxis(_movementAxisName);
+        _turnInputValue= Input.GetAxis(_turnAxisName);
+
+        EngineAudio();
     }
 
 
     private void EngineAudio()
     {
-        // Play the correct audio clip based on whether or not the tank is moving and what audio is currently playing.
+        if(Mathf.Abs(_movementInputValue) < 0.1f && Mathf.Abs(_turnInputValue) < 0.1f)
+        {
+            if (MovementAudio.clip == EngineDriving)
+            {
+                MovementAudio.clip = EngineIdling;
+                MovementAudio.pitch = Random.Range(_originalPitch - PitchRange, _originalPitch + PitchRange);
+                MovementAudio.Play();
+            }
+        }
+        else
+        {
+            if (MovementAudio.clip == EngineIdling)
+            {
+                MovementAudio.clip = EngineDriving;
+                MovementAudio.pitch = Random.Range(_originalPitch - PitchRange,_originalPitch+PitchRange);
+                MovementAudio.Play();
+            }
+        }
     }
 
 
