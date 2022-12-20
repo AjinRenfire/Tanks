@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class TankHealth : MonoBehaviour
@@ -10,45 +10,59 @@ public class TankHealth : MonoBehaviour
     public Color ZeroHealthColor = Color.red;    
     public GameObject ExplosionPrefab;
     
-    /*
-    private AudioSource m_ExplosionAudio;          
-    private ParticleSystem m_ExplosionParticles;   
-    private float m_CurrentHealth;  
-    private bool m_Dead;            
+    
+    private AudioSource _explosionAudio;          
+    private ParticleSystem _explosionParticles;   
+    private float _currentHealth;  
+    private bool _isDead;            
 
 
     private void Awake()
     {
-        m_ExplosionParticles = Instantiate(m_ExplosionPrefab).GetComponent<ParticleSystem>();
-        m_ExplosionAudio = m_ExplosionParticles.GetComponent<AudioSource>();
+        _explosionParticles = Instantiate(ExplosionPrefab).GetComponent<ParticleSystem>();
+        _explosionAudio = _explosionParticles.GetComponent<AudioSource>();
 
-        m_ExplosionParticles.gameObject.SetActive(false);
+        _explosionParticles.gameObject.SetActive(false);
     }
 
 
     private void OnEnable()
     {
-        m_CurrentHealth = m_StartingHealth;
-        m_Dead = false;
+        _currentHealth = StartingHealth;
+        _isDead = false;
 
         SetHealthUI();
     }
-    */
+    
 
     public void TakeDamage(float amount)
     {
-        // Adjust the tank's current health, update the UI based on the new health and check whether or not the tank is dead.
+        _currentHealth -= amount;
+        SetHealthUI();
+
+        if(_currentHealth <= 0f && !_isDead){
+            OnDeath();
+        }
     }
 
 
     private void SetHealthUI()
     {
-        // Adjust the value and colour of the slider.
+        Slider.value = _currentHealth;
+        FillImage.color = Color.Lerp(ZeroHealthColor,FullHealthColor,_currentHealth/StartingHealth);
     }
 
 
     private void OnDeath()
     {
-        // Play the effects for the death of the tank and deactivate it.
+        _isDead = true;
+
+        _explosionParticles.transform.position = transform.position;
+        _explosionParticles.gameObject.SetActive(true);
+
+        _explosionParticles.Play();
+        _explosionAudio.Play();
+
+        gameObject.SetActive(false);
     }
 }
